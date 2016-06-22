@@ -32,7 +32,7 @@ router.post("/", isLoggedIn, function(req, res){
               if(err){
                   console.log(err);
               } else {
-                  //add username and id to comment
+                  //add username and id to comment object of the campground collection
                   comment.author.id = req.user._id;
                   comment.author.username =req.user.username;
                   //save comment
