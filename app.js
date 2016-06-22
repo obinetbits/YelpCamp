@@ -146,6 +146,20 @@ app.post("/register", function(req, res) {
     });
 });
 
+//login form route
+app.get("/login", function(req, res) {
+    res.render("login");
+});
+
+//handling login post logic
+app.post("/login", passport.authenticate("local",
+    {
+        successRedirect: "/campgrounds",
+        failureRedirect: "/login"
+        
+    }), function(req, res) {
+});
+
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("SERVER HAS STARTED!!!");
 });
