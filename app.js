@@ -28,10 +28,16 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use(function(req, res, next){
+    res.locals.currentUser = req.user;
+    next();
+});
+
 app.get("/", function(req, res){
     res.render("landing");
 });
 
+//INDEX ROUTE - show all campgrounds
 app.get("/campgrounds", function(req, res) {
       //  res.render("campgrounds", {campgrounds:campGrounds});
       //Get all cmpgrounds form db
