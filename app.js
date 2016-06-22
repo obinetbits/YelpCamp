@@ -15,19 +15,18 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 seedDB();
 
+//PASSPORT CONFIGURATION
+app.use(require("express-session")({
+    secret: "I must become the the best Software Engineer humanly possible",
+    resave: false,
+    saveUninitialized: false
+}));
 
-
-/*var campGrounds = [
-        {name:"Salmon Creek", image:"https://farm8.staticflickr.com/7252/7626464792_3e68c2a6a5.jpg"},
-        {name:"Granite Hill", image:"https://farm5.staticflickr.com/4137/4812576807_8ba9255f38.jpg"},
-        {name:"Mountain Goats's Rest", image:"https://farm4.staticflickr.com/3492/3823130660_0509aa841f.jpg"},
-        {name:"Salmon Creek", image:"https://farm8.staticflickr.com/7252/7626464792_3e68c2a6a5.jpg"},
-        {name:"Granite Hill", image:"https://farm5.staticflickr.com/4137/4812576807_8ba9255f38.jpg"},
-        {name:"Mountain Goats's Rest", image:"https://farm4.staticflickr.com/3492/3823130660_0509aa841f.jpg"},
-        {name:"Salmon Creek", image:"https://farm8.staticflickr.com/7252/7626464792_3e68c2a6a5.jpg"},
-        {name:"Granite Hill", image:"https://farm5.staticflickr.com/4137/4812576807_8ba9255f38.jpg"},
-        {name:"Mountain Goats's Rest", image:"https://farm4.staticflickr.com/3492/3823130660_0509aa841f.jpg"}
-        ];*/
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.get("/", function(req, res){
     res.render("landing");
@@ -122,6 +121,29 @@ app.post("/campgrounds/:id/comments", function(req, res){
     
     
     
+});
+
+//===============
+//AUTH ROUTES
+//===============
+
+// register form route
+app.get("/register", function(req, res) {
+    res.render("register");
+});
+
+//handle sign up logic
+app.post("/register", function(req, res) {
+    var newUser = new User({username: req.body.username});
+    User.register(newUser, req.body.password, function(err, user){
+        if(err){
+            console.log(err);
+            return res.render("register");
+        }
+        passport.authenticate("local")(req, res, function(){
+            res.redirect("/campgrounds");
+        });
+    });
 });
 
 app.listen(process.env.PORT, process.env.IP, function(){
