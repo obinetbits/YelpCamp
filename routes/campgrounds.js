@@ -5,7 +5,7 @@ var express = require("express"),
 
 //INDEX ROUTE - show all campgrounds
 router.get("/", function(req, res) {
-      //Get all cmpgrounds form db
+      //Get all campgrounds form db
       Campground.find({}, function(err, allCampgrounds){
           if(err){
               console.log(err);
@@ -55,6 +55,31 @@ router.get("/:id", function(req, res){
            //render show template with that campground
            res.render("campgrounds/show", {campground: foundCampground});
        }
+    });
+ });
+ 
+ //EDIT CAMPGROUND ROUTE
+ router.get("/:id/edit", function(req, res) {
+     Campground.findById(req.params.id, function(err, foundCampground){
+         if(err){
+             console.log(err);
+             res.redirect("/campgrounds");
+         } else {
+             res.render("campgrounds/edit", {campground: foundCampground});
+         }
+     });
+ });
+ 
+ //UPDATE CAMPGROUND ROUTE
+ router.put("/:id", function(req, res){
+    //find and update the correct campground
+    Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, updatedCampground){
+        if(err){
+            res.redirect("/campgrounds");
+        } else {
+            //redirect somewhere(show page)
+            res.redirect("/campgrounds/" + req.params.id);
+        }
     });
  });
  
