@@ -27,14 +27,16 @@ router.post("/", middleware.isLoggedIn, function(req, res){
     var author = {
         id: req.user._id,
         username: req.user.username
-    }
+    };
     
     var newCampground = {name: name, image: image, description: desc, author:author};
    // Create a new campground
    Campground.create(newCampground, function(err, newlyCreated){
        if(err){
+           req.flash("error", err.message);
            console.log(err);
        } else {
+            req.flash("success", newlyCreated.name + " has been successfully added to Campgrounds");
             //redirect back to campgrounds page
             res.redirect("/campgrounds");
        }
