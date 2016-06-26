@@ -34,7 +34,7 @@ router.post("/register", function(req, res) {
 
 //show login form
 router.get("/login", function(req, res) {
-    res.render("login", {message: req.flash("Oops")});
+    res.render("login");
 });
 
 //handling login post logic
@@ -49,15 +49,11 @@ router.post("/login", passport.authenticate("local",
 //logout route
 router.get("/logout", function(req, res) {
     req.logout();
+    req.flash("success", "You have been logged out");
     res.redirect("/campgrounds");
 });
 
-//middleware to check if user is logged in
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-}
+//middleware to check if user is logged in. was here
+
 
 module.exports = router;
