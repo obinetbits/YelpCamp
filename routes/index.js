@@ -5,7 +5,7 @@ var express = require("express"),
 
 //Root route
 router.get("/", function(req, res){
-    res.render("landing");
+    res.redirect("/campgrounds");
 });
  
 
