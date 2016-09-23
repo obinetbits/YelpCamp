@@ -1,5 +1,6 @@
 var express       = require("express"),
     app           = express(),
+    favicon       = require("serve-favicon"),
     bodyParser    = require("body-parser"),
     mongoose      = require("mongoose"),
     flash         = require("connect-flash"),
@@ -25,12 +26,14 @@ mongoose.connect(url);
 //mongoose.connect(process.env.DATABASEURL);
 //mongoose.connect("mongodb://localhost/yelp_camp");
 
-
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
+app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
+
+//app.use('/favicon.ico', express.static('/favicon.ico'));
 //seedDB(); //seed the database
 
 
